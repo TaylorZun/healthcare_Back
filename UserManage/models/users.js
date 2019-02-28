@@ -1,4 +1,4 @@
-import { queryUser, removeUser, updateUser} from '@/services/user';
+import { queryUser, removeUser, updateUser, getbloodpressure, sugardata, gettiezi} from '@/services/user';
 
 export default {
     namespace: 'users',
@@ -8,8 +8,12 @@ export default {
     //       list: [],
     //       pagination: {},
     // },
-    data:[]
-},
+    data:[],
+    bloodpressure: [],
+    sugardata: [],
+    medicine: [],
+    tiezilist: [],
+    },
 
 effects: {
 
@@ -33,13 +37,61 @@ effects: {
     },
 
     *update({ payload, callback }, { call, put}) {
-        const res = yield call(updateUser, payload);
+        console.log(payload)
+        // const res = yield call(updateUser, payload);
+        console.log(res)
+        // yield put({
+        //     type: 'save',
+        //     payload: res.data,
+        // });
+        // if(callback) callback();
+        const res = yield call(queryUser, payload);
+        console.log(res);
         yield put({
             type: 'save',
-            payload: res
+            payload: res.data,
         });
-        if(callback) callback();
     },
+
+
+    *getbloodpressure(_, { call, put }) {
+        const res = yield call(getbloodpressure)
+        console.log(res)
+        yield put ({
+            type: 'show',
+            // payload: res.data,
+            payload :{
+                bloodpressure: res.data,
+            }
+           
+        })
+
+    },
+
+    *sugardata(_, { call, put }) {
+        const  res = yield call(sugardata)
+        yield put ({
+            type:'show',
+            payload: {  //payload与reducer有关的。
+                sugardata: res.data
+            }
+        })
+    },
+
+    *gettiezi1(_, { call, put }) {
+        console.log(res)
+        const res = yield call(gettiezi)
+        yield put ({
+            type:'show',
+            payload: {  //payload与reducer有关的。
+                tiezilist: res.data
+            }
+        })
+    },
+
+
+
+
 },
 
 reducers: {
@@ -49,6 +101,12 @@ reducers: {
             data:action.payload,
         };
     },
+    show(state, { payload }) {
+        return {
+          ...state,
+          ...payload,
+        };
+      },
 },
 
 
