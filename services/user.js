@@ -16,14 +16,39 @@ export async function removeUser(params) {
 }
 
 export async function updateUser(params) {
-  return request('/api/user/updateuser', {
+  return request(`/api/user/updateuser?${stringify(params)}`,{
     method: 'POST',
-    body: {
-      ...params,
-      method:'update',
-    },
+    // body: {
+    //   ...params,
+    // }
   });
 }
+
+
+export async function getbloodpressure() {
+  return request(`/api/user/blood`);
+
+}
+
+export async function sugardata() {
+  return request('/api/user/sugardata');
+}
+
+export async function gettiezi() {
+  return  request('api/user/gettiezi');
+}
+
+
+
+// export async function updateUser(params) {
+//   return request('/api/user/updateuser', {
+//     method: 'POST',
+//     body: {
+//       ...params,
+//       method:'update',
+//     },
+//   });
+// }
 
 export async function queryCurrent() {
   return request('/api/currentUser');
