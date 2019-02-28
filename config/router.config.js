@@ -32,12 +32,12 @@ export default [
           {
             path: '/dashboard/monitor',
             name: 'monitor',
-            component: './Weekreports/index',
+            component: './UserManage/UserData',
           },
           {
             path: '/dashboard/workplace',
             name: 'workplace',
-            component: './Dashboard/Workplace',
+            component: './UserManage/FatieShenhe',
           },
         ],
       },
@@ -50,7 +50,7 @@ export default [
           {
             path: '/form/basic-form',
             name: 'basicform',
-            component: './Forms/BasicForm',
+            component: './DoctorManage/DoctorInformation',
           },
           {
             path: '/form/step-form',
@@ -97,12 +97,14 @@ export default [
           {
             path: '/list/table-list',
             name: 'searchtable',
-            component: './List/TableList',
+             component: './List/TableList',
+
           },
           {
             path: '/list/basic-list',
             name: 'basiclist',
-            component: './List/BasicList',
+            // component: './List/BasicList',
+             component: './Profile/AdvancedProfile',
           },
           {
             path: '/list/card-list',
@@ -152,7 +154,8 @@ export default [
             path: '/profile/advanced',
             name: 'advanced',
             authority: ['admin'],
-            component: './Profile/AdvancedProfile',
+            // component: './Profile/AdvancedProfile',
+            component: './List/TableList',
           },
         ],
       },
