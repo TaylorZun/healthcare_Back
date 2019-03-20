@@ -2,6 +2,7 @@ import request from '@/utils/request';
 import { stringify } from 'qs'
 
 export async function queryUser(params) {
+  console.log(params)
   return request(`/api/user/userlist?${stringify(params)}`);
 }
 
@@ -15,12 +16,16 @@ export async function removeUser(params) {
   });
 }
 
+/**
+ * 
+ * @param {下面这个更新是正确的  注意在服务端取值时有 post ('params')} params 
+ */
 export async function updateUser(params) {
-  return request(`/api/user/updateuser?${stringify(params)}`,{
+  return request(`/api/user/updateuser`,{
     method: 'POST',
-    // body: {
-    //   ...params,
-    // }
+    body: {
+      params,
+    }
   });
 }
 
