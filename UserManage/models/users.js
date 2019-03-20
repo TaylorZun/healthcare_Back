@@ -19,7 +19,7 @@ effects: {
 
     *fetch({ payload }, { call, put }) {
         const res = yield call(queryUser, payload);
-        console.log(res);
+        // console.log(res);
         yield put({
             type: 'save',
             payload: res.data,
@@ -36,20 +36,19 @@ effects: {
         if(callback) callback();
     },
 
-    *update({ payload, callback }, { call, put}) {
-        console.log(payload)
-        // const res = yield call(updateUser, payload);
+    *update({ payload }, { call, put}) {
+        const res = yield call(updateUser, payload);
         console.log(res)
         // yield put({
         //     type: 'save',
         //     payload: res.data,
         // });
         // if(callback) callback();
-        const res = yield call(queryUser, payload);
-        console.log(res);
+        const res2 = yield call(queryUser, payload);
+        // console.log(res);
         yield put({
             type: 'save',
-            payload: res.data,
+            payload: res2.data,
         });
     },
 
@@ -107,6 +106,13 @@ reducers: {
           ...payload,
         };
       },
+      queryList(state, action) {
+        return {
+          ...state,
+          list: action.payload,
+        };
+      },
+
 },
 
 

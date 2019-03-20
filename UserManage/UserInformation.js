@@ -119,6 +119,7 @@ class UserInformation extends PureComponent {
    };
 
    showEditModal = record => {
+    //    console.log(record)
        this.setState({
            visible: true,
            current: record,
@@ -172,7 +173,6 @@ class UserInformation extends PureComponent {
 
       const values = {
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       this.setState({
@@ -245,7 +245,6 @@ render() {
     } = this.props;
     const { visible, done, current = {} } = this.state;
 
-    console.log(current)
 
     const getModalContent = () => {
         if (done) {
