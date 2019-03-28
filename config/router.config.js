@@ -30,8 +30,13 @@ export default [
             component: './UserManage/UserInformation',
           },
           {
-            path: '/dashboard/monitor',
-            name: 'monitor',
+            path: '/dashboard/datadetail',
+            name: 'datadetail',
+            component: './UserManage/Datadetail',
+          },
+          {
+            path: '/dashboard/dataTotal',
+            name: 'dataTotal',
             component: './UserManage/UserData',
           },
           {
@@ -52,39 +57,12 @@ export default [
             name: 'basicform',
             component: './DoctorManage/DoctorInformation',
           },
-          {
-            path: '/form/step-form',
-            name: 'stepform',
-            component: './Forms/StepForm',
-            hideChildrenInMenu: true,
-            routes: [
-              {
-                path: '/form/step-form',
-                name: 'stepform',
-                redirect: '/form/step-form/info',
-              },
-              {
-                path: '/form/step-form/info',
-                name: 'info',
-                component: './Forms/StepForm/Step1',
-              },
-              {
-                path: '/form/step-form/confirm',
-                name: 'confirm',
-                component: './Forms/StepForm/Step2',
-              },
-              {
-                path: '/form/step-form/result',
-                name: 'result',
-                component: './Forms/StepForm/Step3',
-              },
-            ],
-          },
+          
           {
             path: '/form/advanced-form',
             name: 'advancedform',
             authority: ['admin'],
-            component: './Weekreports/index',
+            component: './DoctorManage/DoctorBusiness',
           },
         ],
       },
@@ -97,19 +75,19 @@ export default [
           {
             path: '/list/table-list',
             name: 'searchtable',
-             component: './List/TableList',
+             component: './03OrderManager/Order',
 
           },
           {
             path: '/list/basic-list',
             name: 'basiclist',
             // component: './List/BasicList',
-             component: './Profile/AdvancedProfile',
+             component: './03OrderManager/Order',
           },
           {
             path: '/list/card-list',
             name: 'cardlist',
-            component: './List/CardList',
+            component: './03OrderManager/Order',
           },
           {
             path: '/list/search',
@@ -118,17 +96,17 @@ export default [
             routes: [
               {
                 path: '/list/search',
-                redirect: '/list/search/articles',
+                redirect: './03OrderManager/Order',
               },
               {
                 path: '/list/search/articles',
                 name: 'articles',
-                component: './List/Articles',
+                component: './03OrderManager/Order',
               },
               {
                 path: '/list/search/projects',
                 name: 'projects',
-                component: './List/Projects',
+                component: './03OrderManager/Order',
               },
               {
                 path: '/list/search/applications',
@@ -148,14 +126,14 @@ export default [
           {
             path: '/profile/basic',
             name: 'basic',
-            component: './Profile/BasicProfile',
+            component: './03OrderManager/Order',
           },
           {
             path: '/profile/advanced',
             name: 'advanced',
             authority: ['admin'],
             // component: './Profile/AdvancedProfile',
-            component: './List/TableList',
+            component: './03OrderManager/Order',
           },
         ],
       },
@@ -168,9 +146,9 @@ export default [
           {
             path: '/result/success',
             name: 'success',
-            component: './Result/Success',
+            component: './03OrderManager/Order',
           },
-          { path: '/result/fail', name: 'fail', component: './Result/Error' },
+          { path: '/result/fail', name: 'fail', component: './03OrderManager/Order' },
         ],
       },
       {
