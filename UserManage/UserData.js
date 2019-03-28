@@ -3,7 +3,7 @@
  * @Author: your name
  * @LastEditors: Please set LastEditors
  * @Date: 2019-01-21 14:35:48
- * @LastEditTime: 2019-02-24 16:49:26
+ * @LastEditTime: 2019-03-25 22:34:43
  */
 
 import React, { PureComponent, Fragment } from 'react';
@@ -145,9 +145,9 @@ const columns2 = [
     dispatch({
       type: 'users/getbloodpressure',
     });
-    dispatch({
-        type: 'users/sugardata',
-      });
+    // dispatch({
+    //     type: 'users/sugardata',
+    //   });
   }
           
   onOperationTabChange = key => {
@@ -175,7 +175,7 @@ const columns2 = [
           pagination={true}
           loading={loading}
           rowSelection={rowSelection}
-          dataSource={sugardata}
+          // dataSource={sugardata}
           columns={columns2}
         />
       ),
@@ -184,7 +184,7 @@ const columns2 = [
           pagination={true}
           loading={loading}
           rowSelection={rowSelection}
-          dataSource={sugardata}
+          // dataSource={sugardata}
           columns={columns2}
         />
       ),
@@ -193,14 +193,14 @@ const columns2 = [
           pagination={true}
           loading={loading}
           rowSelection={rowSelection}
-          dataSource={sugardata}
+          // dataSource={sugardata}
           columns={columns2}
         />
       ),
     };
     
     return (
-        <PageHeaderWrapper title="用户数据汇总展示1">
+        <PageHeaderWrapper title="用户数据汇总展示">
              <Card
         //   className={styles.tabsCard}
           bordered={false}

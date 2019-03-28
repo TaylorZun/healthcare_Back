@@ -70,7 +70,7 @@ class FatieShenhe extends PureComponent {
            key: 'content',
        },
        {
-           title: '申请时间',
+           title: '发表时间',
            dataIndex: 'time',
            key: 'time',
        },
@@ -108,7 +108,7 @@ class FatieShenhe extends PureComponent {
                <Fragment>
                    <a onClick={() => this.showEditModal(record)}>详情</a>
                    <Divider type="vertical" />
-                   <a onClick={() => this.handleMenuClick(record, this.props)}>审核</a>
+                   <a onClick={() => this.handleMenuClick(record, this.props)}>删除</a>
                </Fragment>
            ),
        },
@@ -176,56 +176,55 @@ render() {
     const { visible, done, current = {} } = this.state;
     const { tiezilist } = users
 
-    console.log(current)
 
-    const getModalContent = () => {
-        if (done) {
-          return (
-            <Result
-              type="success"
-              title="操作成功"
-              description="请合理更改用户基本信息。"
-              actions={
-                <Button type="primary" onClick={this.handleDone}>
-                  知道了
-                </Button>
-              }
-              className={styles.formResult}
-            />
-          );
-        }
+    // const getModalContent = () => {
+    //     if (done) {
+    //       return (
+    //         <Result
+    //           type="success"
+    //           title="操作成功"
+    //           description="请合理更改用户基本信息。"
+    //           actions={
+    //             <Button type="primary" onClick={this.handleDone}>
+    //               知道了
+    //             </Button>
+    //           }
+    //           className={styles.formResult}
+    //         />
+    //       );
+    //     }
 
-        return (
-            <Form >
-             <FormItem key="aid" label="帖子编码" {...this.formLayout}>
-                {getFieldDecorator('aid', {
-                    initialValue: current.aid,
-                })(<Input />)}
-            </FormItem>
-            <FormItem key="userid" label="用户编码" {...this.formLayout}>
-                {getFieldDecorator('userid', {
-                    initialValue: current.userid,
-                })(<Input />)}
-            </FormItem>
-            <FormItem key="title" label="标题" {...this.formLayout}>
-                {getFieldDecorator('title', {
-                    initialValue: current.title,
-                })(<Input />)}
-            </FormItem>
-            <FormItem key="content" label="发帖内容" {...this.formLayout}>
-                {getFieldDecorator('content', {
-                    initialValue: current.content,
-                })(<Input />)}
-            </FormItem>
-            <FormItem  key="status1" label="状态" {...this.formLayout}>
-                {getFieldDecorator('status1', {
-                    initialValue: current.status1,
-                })(<Input />)}
-            </FormItem>
-            </Form>
-        )
+    //     return (
+    //         <Form >
+    //          <FormItem key="aid" label="帖子编码" {...this.formLayout}>
+    //             {getFieldDecorator('aid', {
+    //                 initialValue: current.aid,
+    //             })(<Input />)}
+    //         </FormItem>
+    //         <FormItem key="userid" label="用户编码" {...this.formLayout}>
+    //             {getFieldDecorator('userid', {
+    //                 initialValue: current.userid,
+    //             })(<Input />)}
+    //         </FormItem>
+    //         <FormItem key="title" label="标题" {...this.formLayout}>
+    //             {getFieldDecorator('title', {
+    //                 initialValue: current.title,
+    //             })(<Input />)}
+    //         </FormItem>
+    //         <FormItem key="content" label="发帖内容" {...this.formLayout}>
+    //             {getFieldDecorator('content', {
+    //                 initialValue: current.content,
+    //             })(<Input />)}
+    //         </FormItem>
+    //         <FormItem  key="status1" label="状态" {...this.formLayout}>
+    //             {getFieldDecorator('status1', {
+    //                 initialValue: current.status1,
+    //             })(<Input />)}
+    //         </FormItem>
+    //         </Form>
+    //     )
 
-    }
+    // }
 
     
     // const modalFooter = done
@@ -235,7 +234,7 @@ render() {
 
 
     return (
-        <PageHeaderWrapper title="发帖申请列表">
+        <PageHeaderWrapper title="用户发帖列表">
         <Card bordered={false}>
         <div className={styles.tableList}>
        
@@ -255,7 +254,7 @@ render() {
        visible={visible}
     //    {...modalFooter}
      >
-       {getModalContent()}
+       {/* {getModalContent()} */}
      </Modal>
         </PageHeaderWrapper>
     )

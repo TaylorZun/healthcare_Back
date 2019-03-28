@@ -23,6 +23,7 @@ import {
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './doctorinf.less';
+import Result from '@/components/Result';
 
 const FormItem = Form.Item;
 
@@ -90,6 +91,8 @@ const getValue = obj =>
 
         state={
             selectedRows: [],
+            visible: false
+            
         };
           
   componentDidMount() {
@@ -112,39 +115,27 @@ const getValue = obj =>
       selectedRows: rows,
     });
   };
-  
-  handleModalVisible = flag => {
+  showModal = () => {
     this.setState({
-      modalVisible: !!flag,
+        visible: true,
+        current: undefined,
     });
-  };
+};
 
-  //过滤减索
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
-    const { formValues } = this.state;
+handleDone = () => {
+  this.setState({
+    done: false,
+    visible: false,
+  });
+ }
 
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
+  
+handleCancel = () => {
+  this.setState({
+    visible: false,
+  });
+};
 
-    const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
-      ...formValues,
-      ...filters,
-    };
-    if (sorter.field) {
-      params.sorter = `${sorter.field}_${sorter.order}`;
-    }
-
-    dispatch({
-      type: 'doctor/fetch1',
-      payload: params,
-    });
-  };
 
 
   handleSearch = e => {
@@ -157,7 +148,6 @@ const getValue = obj =>
 
       const values = {
         ...fieldsValue,
-        // updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       this.setState({
@@ -178,10 +168,28 @@ const getValue = obj =>
       formValues: {},
     });
     dispatch({
-      type: 'doctor/fetch1',
-      payload: {},
+      type: 'doctor/fetch',
     });
   };
+  
+  handleSubmit = e => {
+    e.preventDefault();
+    const { dispatch, form } = this.props;
+    const { current } = this.state;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      this.setState({
+        done: true,
+      });
+      dispatch({
+        type: 'doctor/submit',
+        payload: {  ...fieldsValue },
+      });
+    });
+  };
+
+
   
   renderSimpleForm() {
     const {
@@ -199,10 +207,10 @@ const getValue = obj =>
             <FormItem label="医生职称">
               {getFieldDecorator('zhicheng')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="主治医师">主治医师</Option>
-                  <Option value="主任医师">主任医师</Option>
-                  <Option value="副主任医师">副主任医师</Option>
-                  <Option value="住院医师">住院医师</Option>
+                  <Select.Option value="主治医师">主治医师</Select.Option>
+                  <Select.Option value="主任医师">主任医师</Select.Option>
+                  <Select.Option value="副主任医师">副主任医师</Select.Option>
+                  <Select.Option value="住院医师">住院医师</Select.Option>
                 </Select>
               )}
             </FormItem>
@@ -238,13 +246,13 @@ const getValue = obj =>
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-          <FormItem label="医生职称">
+            <FormItem label="医生职称">
               {getFieldDecorator('zhicheng')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">主治医师</Option>
-                  <Option value="1">主任医师</Option>
-                  <Option value="2">副主任医师</Option>
-                  <Option value="3">住院医师</Option>
+                  <Select.Option value="主治医师">主治医师></Select.Option>
+                  <Select.Option value="主任医师">主任医师</Select.Option>
+                  <Select.Option value="副主任医师">副主任医师</Select.Option>
+                  <Select.Option value="住院医师">住院医师</Select.Option>
                 </Select>
               )}
             </FormItem>
@@ -301,32 +309,76 @@ const getValue = obj =>
       const { doctor , loading } = this.props;
       const { doctorlist } = doctor
       const { selectedRows } = this.state
-      const menu = (
-        <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-          <Menu.Item key="remove">删除</Menu.Item>
-          <Menu.Item key="approval">批量审批</Menu.Item>
-        </Menu>
-      );
+      const {
+        form: { getFieldDecorator},
+    } = this.props;
+    const { visible, done, current = {} } = this.state;
 
+
+    const getModalContent = () => {
+        if (done) {
+          return (
+            <Result
+              type="success"
+              title="操作成功"
+              description="请合理更改用户基本信息。"
+              actions={
+                <Button type="primary" onClick={this.handleDone}>
+                  知道了
+                </Button>
+              }
+              className={styles.formResult}
+            />
+          );
+        }
+
+        return (
+            <Form onSubmit={this.handleSubmit}>
+             <FormItem key="name" label="医生名称" {...this.formLayout}>
+                {getFieldDecorator('name', {
+                    // rules: [{ required: true, message: '请输入用户姓名' }],
+                    initialValue: current.name,
+                })(<Input />)}
+            </FormItem>
+            <FormItem key="hospital" label="医院" {...this.formLayout}>
+                {getFieldDecorator('hospital', {
+                    initialValue: current.hospital,
+                })(<Input />)}
+            </FormItem>
+            <FormItem key="zhicheng" label="职称" {...this.formLayout}>
+                {getFieldDecorator('zhicheng', {
+                    initialValue: current.zhicheng,
+                })(<Input />)}
+            </FormItem>
+            <FormItem key="keshi" label="科室" {...this.formLayout}>
+                {getFieldDecorator('keshi', {
+                    // rules: [{ required: true, message: '请输入科室' }],
+                    initialValue: current.keshi,
+                })(<Input />)}
+            </FormItem>
+           
+            </Form>
+        )
+
+    }
+
+    
+    const modalFooter = done
+      ? { footer: null, onCancel: this.handleDone }
+      : { okText: '保存', onOk: this.handleSubmit, onCancel: this.handleCancel };
+
+
+     
       return(
         <PageHeaderWrapper title="医生基本信息管理">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={this.showModal}>
                 新建
               </Button>
-              {selectedRows.length > 0 && (
-                <span>
-                  <Button>批量操作</Button>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                      更多操作 <Icon type="down" />
-                    </Button>
-                  </Dropdown>
-                </span>
-              )}
+             
             </div>
             <Table
               selectedRows={selectedRows}
@@ -339,6 +391,15 @@ const getValue = obj =>
             />
           </div>
         </Card>
+        <Modal
+       title="新增医生"
+       width={640}
+       destroyOnClose
+       visible={visible}
+       {...modalFooter}
+     >
+       {getModalContent()}
+     </Modal>
         </PageHeaderWrapper>
       )
   }

@@ -1,13 +1,13 @@
 /*
- * @Description: 用户基本信息
+ * @Description:医生业务管理
  * @Author: your name
  * @LastEditors: Please set LastEditors
- * @Date: 2019-01-21 14:35:22
- * @LastEditTime: 2019-03-27 01:41:52
+ * @Date: 2019-01-27 01:42:34
+ * @LastEditTime: 2019-03-27 07:39:32
  */
 
+ 
 import React, { PureComponent, Fragment } from 'react';
-// import { findDOMNode } from 'react-dom';   该项缺失
 import { connect } from 'dva';
 import moment from 'moment';
 import {
@@ -30,7 +30,7 @@ import {
     Table
 } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import styles from './UserInformation.less';
+import styles from './doctorinf.less';
 import Result from '@/components/Result';
 
 const FormItem = Form.Item;
@@ -38,12 +38,12 @@ const { TextArea } = Input;
 const { Option } = Select;
 const confirm = Modal.confirm;
 
-@connect(({ users, loading }) => ({
-    users,
-    loading: loading.models.users,
+@connect(({ doctor, loading }) => ({
+    doctor,
+    loading: loading.models.doctor,
 }))
 @Form.create()
-class UserInformation extends PureComponent {
+class DoctorBusiness extends PureComponent {
    state = {
       visible:false,
       done: false,
@@ -55,50 +55,46 @@ class UserInformation extends PureComponent {
 
    columns = [
        {
-           title: '用户编码',
-           dataIndex: 'userid',
-           key: 'userid',
+           title: '业务编码',
+           dataIndex: 'bn_id',
+           key: 'bn_id',
        },
        {
-           title: '真实姓名',
-           dataIndex: 'username',
-           key:'username',
+           title: '医生姓名',
+           dataIndex: 'name',
+           key:'name',
        },
        {
-           title: '昵称',
-           dataIndex: 'nickname',
-           key:'nickname',
+           title: '视频问诊业务是否开通',
+           dataIndex: 'video_zixun',
+           key:'video_zixun',
        },
        {
-           title: '性别',
-           dataIndex: 'gender',
-           key: 'gender',
+           title: '电话问诊业务是否开通',
+           dataIndex: 'tel_zixun',
+           key: 'tel_zixun',
        },
        {
-           title: '出生年月',
-           dataIndex: 'birthdate',
-           key: 'birthdate',
+           title: '图文问诊业务是否开通',
+           dataIndex: 'text_zixun',
+           key: 'text_zixun',
        },
        {
-           title: '年龄',
-           dataIndex: 'age',
-           key:'age',
+           title: '视频问诊定价',
+           dataIndex: 'video_price',
+           key:'video_price',
        },
        {
-           title: '联系电话',
-           dataIndex:'tel',
-           key:'tel',
+           title: '电话问诊定价',
+           dataIndex:'tel_price',
+           key:'tel_price',
        },
        {
-           title: '身份证号',
-           dataIndex: 'identity',
-           key:'identity',
+           title: '图文问诊定价',
+           dataIndex: 'text_price',
+           key:'text_price',
        },
-       {
-           title: '紧急联系人邮箱',
-           dataIndex: 'email',
-           key:'email',
-       },
+       
        {
            title: '操作',
            key:'caozuo',
@@ -115,7 +111,7 @@ class UserInformation extends PureComponent {
    componentDidMount() {
        const { dispatch } = this.props;
        dispatch({
-           type: 'users/fetch',
+           type: 'doctor/fetchbusiness',
        });
    }
 
@@ -151,7 +147,7 @@ class UserInformation extends PureComponent {
     e.preventDefault();
     const { dispatch, form } = this.props;
     const { current } = this.state;
-    const userid = current ? current.userid : '';
+    const bn_id = current ? current.bn_id : '';
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -159,8 +155,8 @@ class UserInformation extends PureComponent {
         done: true,
       });
       dispatch({
-        type: 'users/submit',
-        payload: { userid, ...fieldsValue },
+        type: 'doctor/updatebusiness',
+        payload: { bn_id, ...fieldsValue },
       });
     });
   };
@@ -183,10 +179,10 @@ class UserInformation extends PureComponent {
         formValues: values,
       });
 
-      dispatch({
-        type: 'users/fetch',
-        payload: values,
-      });
+    //   dispatch({
+    //     type: 'users/fetch',
+    //     payload: values,
+    //   });
     });
   };
 
@@ -195,16 +191,16 @@ handleMenuClick = (record) => {
     console.log(record)
     confirm({
         title: '确定要删除吗？',
-        onOk: () => this.onDeleteItem(record.userid)
+        onOk: () => this.onDeleteItem(record.bn_id)
     })
 }
 
 onDeleteItem = id => {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'users/remove',
-      payload: { id },
-    });
+    // dispatch({
+    //   type: 'users/remove',
+    //   payload: { id },
+    // });
 }
 
 handleAdd = e => {
@@ -223,10 +219,10 @@ handleAdd = e => {
         formValues: values,
       });
 
-      dispatch({
-        type: 'users/addUser',
-        payload: values,
-      });
+    //   dispatch({
+    //     type: 'users/addUser',
+    //     payload: values,
+    //   });
     });
 }
 
@@ -238,7 +234,7 @@ handleFormReset = () => {
       formValues: {},
     });
     dispatch({
-      type: 'users/fetch',
+      type: 'doctor/fetchbusiness',
     });
   };
 
@@ -251,20 +247,11 @@ renderHeadForm() {
         <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg:24, xl: 48}}>
         <Col md={8} sm={24}>
-        <FormItem key="username" label="用户姓名">
+        <FormItem key="username" label="医生姓名">
         {getFieldDecorator('username')(<Input placeholder="请输入" />)}
         </FormItem>
         </Col>
-        <Col md={8} sm={24}>
-        <FormItem key="gender" label="用户性别">
-        {getFieldDecorator('gender')(
-            <Select placeholder="请选择" style={{ width: '100%'}}>
-            <Select.Option value="男">男</Select.Option>
-            <Select.Option value="女">女</Select.Option>
-            </Select>
-        )}
-        </FormItem>
-        </Col>
+        
         <Col md={8} sm={24}>
         <span className={styles.submitButtons}>
         <Button type="primary" htmlType="submit">查询</Button>
@@ -283,7 +270,7 @@ renderHeadForm() {
 
 render() {
     const {
-        users:{ data },
+        doctor:{ data },
         loading,
     } = this.props;
     // console.log(this.props.users)
@@ -312,36 +299,28 @@ render() {
 
         return (
             <Form onSubmit={this.handleSubmit}>
-             <FormItem key="username" label="用户名" {...this.formLayout}>
-                {getFieldDecorator('username', {
+             <FormItem key="name" label="医生姓名" {...this.formLayout}>
+                {getFieldDecorator('name', {
                     // rules: [{ required: true, message: '请输入用户姓名' }],
-                    initialValue: current.username,
+                    initialValue: current.name,
                 })(<Input />)}
             </FormItem>
-            <FormItem key="age" label="年龄" {...this.formLayout}>
-                {getFieldDecorator('age', {
-                    initialValue: current.age,
+            <FormItem key="video_price" label="视频问诊价格" {...this.formLayout}>
+                {getFieldDecorator('video_price', {
+                    initialValue: current.video_price,
                 })(<Input />)}
             </FormItem>
-            <FormItem key="tel" label="联系电话" {...this.formLayout}>
-                {getFieldDecorator('tel', {
-                    initialValue: current.tel,
+            <FormItem key="tel_price" label="电话问诊价格" {...this.formLayout}>
+                {getFieldDecorator('tel_price', {
+                    initialValue: current.tel_price,
                 })(<Input />)}
             </FormItem>
-            <FormItem key="identity" label="身份证号" {...this.formLayout}>
-                {getFieldDecorator('identity', {
-                    // rules: [{ required: true, message: '请输入身份证号' }],
-                    initialValue: current.identity,
+            <FormItem key="text_price" label="图文问诊价格" {...this.formLayout}>
+                {getFieldDecorator('text_price', {
+                    initialValue: current.text_price,
                 })(<Input />)}
             </FormItem>
-            <FormItem  key="email" label="邮箱" {...this.formLayout}>
-                {getFieldDecorator('email', {
-                     rules: [{
-                        type: 'email', message: '不是合法的格式!',
-                      }],
-                    initialValue: current.email,
-                })(<Input />)}
-            </FormItem>
+           
             </Form>
         )
 
@@ -355,7 +334,7 @@ render() {
 
 
     return (
-        <PageHeaderWrapper title="用户基本信息">
+        <PageHeaderWrapper title="医生业务管理">
         <Card bordered={false}>
         <div className={styles.tableList}>
         <div className={styles.tableListForm}>{this.renderHeadForm()}</div>
@@ -364,12 +343,12 @@ render() {
         dataSource={data}
         columns={this.columns}
         rowSelection={null}
-        rowKey="userid"
+        rowKey="bn_id"
         />
         </div>
         </Card>
        <Modal
-       title={done ? null : `用户信息${current ? '更新' : '添加'}`}
+       title={done ? null : `业务信息${current ? '更新' : '添加'}`}
        width={640}
        destroyOnClose
        visible={visible}
@@ -384,6 +363,6 @@ render() {
 
 }
 
-export default UserInformation;
+export default DoctorBusiness;
 
 
